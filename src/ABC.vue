@@ -1,81 +1,86 @@
-<template>
+    <template>
     <div>
         <!--dành cho ref-->
-            <h2>dành cho ref</h2>
-            <p>{{ count }}</p>
-            <p>{{ doubledCount }}</p>
-            <button @click="incrementCount">Tăng count</button>
-            <button @click="decrementCount">Giảm count</button>
+        <h2>dành cho ref</h2>
+        <p>{{ count }}</p>
+        <p>{{ doubledCount }}</p>
+        <button @click="incrementCount">Tăng count</button>
+        <button @click="decrementCount">Giảm count</button>
         <!--dành cho reactive-->
-            <h2>dành cho reactive</h2>
-            <p>{{ countReactive.count }}</p>
-            <p>{{ doubledCountReactive }}</p>
-            <button @click="incrementCountReactive">Tăng count Reactive</button>
-            <button @click="decrementCountReactive">Giảm count Reactive</button>
-            <button @click="test1">test1</button>
+        <h2>dành cho reactive</h2>
+        <p>{{ countReactive.count }}</p>
+        <p>{{ doubledCountReactive }}</p>
+        <button @click="incrementCountReactive">Tăng count Reactive</button>
+        <button @click="decrementCountReactive">Giảm count Reactive</button>
+        <button @click="test1">test1</button>
     </div>
-</template>
+    </template>
+    <script>
+    import { ref, reactive, computed, watch, getCurrentInstance } from "vue";
 
-<script>
-import { ref, reactive, computed, watch, getCurrentInstance } from 'vue';
-export default {
-
-    name : "ABC",
+    export default {
+    name: "ABC",
     props: {
         myProps: {
-            type:  "string",
-            default: null
-        }
+        type: String,
+        default: null,
+        },
     },
     setup() {
-        const {proxy} = getCurrentInstance();
+        const { proxy } = getCurrentInstance();
         const count = ref(0);
         const countReactive = reactive({
-            count: 0,
+        count: 0,
         });
         const doubledCount = computed(() => count.value * 2);
         const doubledCountReactive = computed(() => countReactive.count * 2);
 
         const incrementCount = () => {
-            count.value++;
+        count.value++;
         };
         const decrementCount = () => {
-            count.value--;
+        count.value--;
         };
         const incrementCountReactive = () => {
-            incrementCount();
-            countReactive.count++;
+        incrementCount();
+        countReactive.count++;
         };
         const decrementCountReactive = () => {
-            countReactive.count--;
+        countReactive.count--;
         };
         watch(count, (newCount, oldCount) => {
-            console.log(`Giá trị mới của count là ${newCount}`);
+        console.log(`Giá trị mới của count là ${newCount}`);
         });
-        watch(() => countReactive.count, (newCount, oldCount) => {
+        watch(
+        () => countReactive.count,
+        (newCount, oldCount) => {
             console.log(`Giá trị mới của countcountReactive là ${newCount}`);
-        });
+        }
+        );
         return {
-            count,
-            countReactive,
-            doubledCount,
-            doubledCountReactive,
-            incrementCount,
-            decrementCount,
-            incrementCountReactive,
-            decrementCountReactive,
+        count,
+        countReactive,
+        doubledCount,
+        doubledCountReactive,
+        incrementCount,
+        decrementCount,
+        incrementCountReactive,
+        decrementCountReactive,
         };
     },
     methods: {
-        test1(){
-            let me = this;//có thể truy cập đến phương thức kia kk
-            
-        }
+        test1() {
+            let me = this; //có thể truy cập đến phương thức kia kk
+            me.count++;
+            console.log(me.count)
+            me.countReactive.count++;
+            console.log(me.countReactive.count)
+        },
     },
-    data(){
+    data() {
         return {
-            tai: 5
-        }
-    }
-}
-</script>
+        tai: 5,
+        };
+    },
+    };
+    </script>
