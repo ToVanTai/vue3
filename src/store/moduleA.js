@@ -1,31 +1,37 @@
 const moduleA = {
-    namespaced: true, // Cấu hình namespace cho moduleB
+    namespaced: true,
     state() {
         return {
-            countA: 0
+            countA: 1
         }
     },
     mutations: {
-        increment(state) {
+        increment(state, payload) {
             state.countA++;
         },
-        decrement(state) {
+        decrement(state, payload) {
             state.countA--;
         }
     },
     actions: {
-        increment(context) {
-            context.commit('increment');
+        increment(context, payload) {
+            context.commit('increment', payload );
         },
-        decrement(context) {
-            context.commit('decrement');
+        decrement(context, payload) {
+            context.commit('decrement', payload);
         }
     },
     getters: {
-        getCount(state) {
-            return state.countA;
+        getCount: (state)=>{//state hiện tại của chương trình
+            return (payload)=>{//tham số truyền vào
+                return state.countA*payload;
+            }
+        },
+        getDoubleCount: (state) => {//state hiện tại của chương trình
+            return (payload)=>{//tham số truyền vào
+                return state.countA * 2 * payload;
+            }
         }
     }
 }
-
 export default moduleA

@@ -1,86 +1,41 @@
-    <template>
+<template>
     <div>
-        <!--dành cho ref-->
-        <h2>dành cho ref</h2>
-        <p>{{ count }}</p>
-        <p>{{ doubledCount }}</p>
-        <button @click="incrementCount">Tăng count</button>
-        <button @click="decrementCount">Giảm count</button>
-        <!--dành cho reactive-->
-        <h2>dành cho reactive</h2>
-        <p>{{ countReactive.count }}</p>
-        <p>{{ doubledCountReactive }}</p>
-        <button @click="incrementCountReactive">Tăng count Reactive</button>
-        <button @click="decrementCountReactive">Giảm count Reactive</button>
-        <button @click="test1">test1</button>
+        <p>Count: {{ count(2) }}</p>
+        <button @click="increment">Increment</button>
+        <button @click="decrement">Decrement</button>
     </div>
-    </template>
-    <script>
-    import { ref, reactive, computed, watch, getCurrentInstance } from "vue";
+</template>
 
-    export default {
+<script>
+import {useCounterStore} from './pinia/storeCounter';
+import {getCurrentInstance} from 'vue';
+export default {
     name: "ABC",
     props: {
         myProps: {
-        type: String,
-        default: null,
+            type: String,
+            default: null,
         },
     },
-    setup() {
-        const { proxy } = getCurrentInstance();
-        const count = ref(0);
-        const countReactive = reactive({
-        count: 0,
-        });
-        const doubledCount = computed(() => count.value * 2);
-        const doubledCountReactive = computed(() => countReactive.count * 2);
+    setup(props, {
+        emit
+    }) {
+        const counterStore = useCounterStore();
 
-        const incrementCount = () => {
-        count.value++;
+        const increment = () => {
+            counterStore.increment(1);
         };
-        const decrementCount = () => {
-        count.value--;
+        const decrement = () => {
+            counterStore.decrement(2);
         };
-        const incrementCountReactive = () => {
-        incrementCount();
-        countReactive.count++;
-        };
-        const decrementCountReactive = () => {
-        countReactive.count--;
-        };
-        watch(count, (newCount, oldCount) => {
-        console.log(`Giá trị mới của count là ${newCount}`);
-        });
-        watch(
-        () => countReactive.count,
-        (newCount, oldCount) => {
-            console.log(`Giá trị mới của countcountReactive là ${newCount}`);
+        return {
+            count: counterStore.getCount,
+            increment,
+            decrement,
         }
-        );
-        return {
-        count,
-        countReactive,
-        doubledCount,
-        doubledCountReactive,
-        incrementCount,
-        decrementCount,
-        incrementCountReactive,
-        decrementCountReactive,
-        };
     },
-    methods: {
-        test1() {
-            let me = this; //có thể truy cập đến phương thức kia kk
-            me.count++;
-            console.log(me.count)
-            me.countReactive.count++;
-            console.log(me.countReactive.count)
-        },
-    },
-    data() {
-        return {
-        tai: 5,
-        };
-    },
-    };
-    </script>
+    data(){
+        return {abc: 1}
+    }
+};
+</script>
